@@ -4,35 +4,35 @@ from .piece import Piece
 
 class Board:
 
-    #Klasa obiektu planszy - pozycje/ilości pionków
+    #Klasa obsługuje rozmieszczenie pionków na planszy
     def __init__(self):
         self.board = []
-        self.selected_piece = None
         self.red_left = 12
         self.white_left = 12
         self.red_kings = 0
         self.white_kings = 0
         self.create_board()
 
-    #Funkcja rysująca planszę - szachownice
+    #Rysowanie szachownicy - kwadratów po których poruszaja się pionki
     def draw_squares(self, window):
         window.fill(BLACK)
         for row in range(ROWS):
             for col in range(row % 2, COLS, 2):
                 pygame.draw.rect(window, WHITE, (row * SQUARE_SIZE, col * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
 
-    #Funkcja zmieniająca pozycje pionków w tablicy
+    #Zmiana pozycji pionków w tablicy
     def move(self, piece, row, col):
         self.board[piece.row][piece.col], self.board[row][col] = self.board[row][col], self.board[piece.row][piece.col]
         piece.move(row, col)
 
-        if row == ROWS or row == 0:
+        if row == ROWS - 1 or row == 0:
             piece.make_king()
             if piece.color == WHITE:
                 self.white_kings += 1
             else:
                 self.red_kings += 1
 
+    #Zwraca pionek jako obiekt
     def get_piece(self, row, col):
         return self.board[row][col]
 
@@ -51,6 +51,7 @@ class Board:
                 else:
                     self.board[row].append(0)
 
+    #Rysowanie planszy
     def draw(self, window):
         self.draw_squares(window)
         for row in range(ROWS):
@@ -58,3 +59,101 @@ class Board:
                 piece = self.board[row][col]
                 if piece != 0:
                     piece.draw_pieces(window)
+
+    def remove(self, pieces):
+        for piece in pieces:
+            self.board[piece.row][piece.col] = 0
+            if piece != 0:
+                if piece.color == RED:
+                    self.red_left -= 1
+                else:
+                    self.white_left -= 1
+
+    def winner(self):
+        if self.red_left <= 0:
+            return WHITE
+        elif self.white_left <= 0:
+            return RED
+
+    def get_valid_moves(self, piece):
+        moves = {}
+        left = piece.col - 1
+        right = piece.col + 1
+        row = piece.row
+
+        #Sprawdzanie przekątnych w górę
+        if piece.color == RED or piece.is_king:
+            moves.update(self._traverse_left(row - 1, max(row - 3, -1), -1, piece.color, left))
+            moves.update(self._traverse_right(row - 1, max(row - 3, -1), -1, piece.color, right))
+
+        #Sprawdzanie przekątnych w dół
+        if piece.color == WHITE or piece.is_king:
+            moves.update(self._traverse_left(row + 1, min(row + 3, ROWS), 1, piece.color, left))
+            moves.update(self._traverse_right(row + 1, min(row + 3, ROWS), 1, piece.color, right))
+
+        return moves
+    
+    def _traverse_left(self, start, stop, step, color, left, skipped = []):
+        moves = {}
+        last = []
+        for r in range(start, stop, step):
+            if left < 0:
+                break
+            
+            current = self.board[r][left]
+            if current == 0:
+                if skipped and not last:
+                    break
+                elif skipped:
+                    moves[(r, left)] = last + skipped
+                else:
+                    moves[(r, left)] = last
+
+                if last:
+                    if step == -1:
+                        row = max(r - 3, 0)
+                    else:
+                        row = min(r + 3, ROWS)
+                    moves.update(self._traverse_left(r + step, row, step, color, left - 1, skipped = last))
+                    moves.update(self._traverse_right(r + step, row, step, color, left + 1, skipped = last))
+                break
+            elif current.color == color:
+                break
+            else:
+                last = [current]
+                
+            left -= 1
+
+        return moves
+
+    def _traverse_right(self, start, stop, step, color, right, skipped = []):
+        moves = {}
+        last = []
+        for r in range(start, stop, step):
+            if right >= COLS:
+                break
+            
+            current = self.board[r][right]
+            if current == 0:
+                if skipped and not last:
+                    break
+                elif skipped:
+                    moves[(r, right)] = last + skipped
+                else:
+                    moves[(r, right)] = last
+
+                if last:
+                    if step == -1:
+                        row = max(r - 3, 0)
+                    else:
+                        row = min(r + 3, ROWS)
+                    moves.update(self._traverse_left(r + step, row, step, color, right - 1, skipped = last))
+                    moves.update(self._traverse_right(r + step, row, step, color, right + 1, skipped = last))
+                break
+            elif current.color == color:
+                break
+            else:
+                last = [current]
+            right += 1
+
+        return moves

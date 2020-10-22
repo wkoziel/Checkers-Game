@@ -12,5 +12,5 @@ WIDTH, HEIGHT = 800, 800
 ROWS, COLS = 8, 8
 SQUARE_SIZE = WIDTH//COLS
 
-#Img
+#Obrazy importowane z zewnątrz
 CROWN = pygame.transform.scale(pygame.image.load('assets/crown.png'), (44, 25))
