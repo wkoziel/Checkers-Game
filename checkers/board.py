@@ -27,9 +27,9 @@ class Board:
 
         if row == ROWS - 1 or row == 0:
             piece.make_king()
-            if piece.color == WHITE:
+            if piece.color == WHITE and piece.is_king == False:
                 self.white_kings += 1
-            else:
+            elif piece.color == RED and piece.is_king == False:
                 self.red_kings += 1
 
     #Zwraca pionek jako obiekt

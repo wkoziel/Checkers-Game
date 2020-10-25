@@ -1,14 +1,11 @@
-#To jest plik z którego należy uruchamiać aplikacje
-
 import pygame
 from checkers.constants import WIDTH, HEIGHT, SQUARE_SIZE, RED
 from checkers.board import Board
 from checkers.game import Game
 
-#Wstępna konfiguracja
+#Wstępna konfiguracja okna gry
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Warcaby')
-FPS = 60
 
 #Funkcja zwraca pozycje kursora
 def get_position_from_mouse(position):
@@ -17,29 +14,21 @@ def get_position_from_mouse(position):
     col = x // SQUARE_SIZE
     return row, col
 
+#Główna pętla gry
 def main():
-
-    #Inicjalizacja zmiennych
-    game = True
     clock = pygame.time.Clock()
     game = Game(WINDOW)
-
-    #Główna pętla gry
-    while game:
-        clock.tick(FPS)
-
-        #Pętla nasłuchująca eventy
+    while True:
+        clock.tick(60)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                game = False
+                pygame.quit()
+                return -1
             if event.type == pygame.MOUSEBUTTONDOWN:
                 position = pygame.mouse.get_pos()
                 row, col = get_position_from_mouse(position)
                 game.select(row, col)
-
-        #Rysowanie planszy
         game.update()
 
-    pygame.quit()
-
+#INIZJALIZACJA
 main()
