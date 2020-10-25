@@ -1,10 +1,10 @@
 import pygame
-from checkers.constants import WIDTH, HEIGHT, SQUARE_SIZE, RED
+from checkers.constants import WIDTH, HEIGHT, SQUARE_SIZE, BLACK
 from checkers.board import Board
 from checkers.game import Game
 
 #Wstępna konfiguracja okna gry
-WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
+WINDOW = pygame.display.set_mode((WIDTH, HEIGHT+30))
 pygame.display.set_caption('Warcaby')
 
 #Funkcja zwraca pozycje kursora

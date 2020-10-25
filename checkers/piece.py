@@ -1,10 +1,7 @@
 import pygame
-from .constants import RED, WHITE, SQUARE_SIZE, GRAY, CROWN
+from .constants import BLACK, WHITE, SQUARE_SIZE, GRAY, CROWN
 
 class Piece:
-
-    PADDING = 10
-    OUTLINE = 2
 
     #Klasa odpowiedzialna za pionki jako pojedyncze obiekty
     def __init__(self, row, col, color):
@@ -27,8 +24,8 @@ class Piece:
 
     #Funkcja rysująca pionki na planszy
     def draw_pieces(self, window):
-        radius = SQUARE_SIZE // 2 - self.PADDING
-        pygame.draw.circle(window, GRAY, (self.x, self.y), radius + self.OUTLINE)
+        radius = SQUARE_SIZE // 2 - 10
+        pygame.draw.circle(window, GRAY, (self.x, self.y), radius + 3)
         pygame.draw.circle(window, self.color, (self.x, self.y), radius)
         if self.is_king:
             window.blit(CROWN, (self.x - CROWN.get_width() // 2, self.y - CROWN.get_height() // 2))

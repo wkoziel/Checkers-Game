@@ -1,5 +1,5 @@
 import pygame
-from .constants import BLACK, ROWS, COLS, WHITE, RED, SQUARE_SIZE
+from .constants import BLACK, ROWS, COLS, WHITE, BLACK, SQUARE_SIZE
 from .piece import Piece
 
 class Board:
@@ -7,9 +7,9 @@ class Board:
     #Klasa obsługuje rozmieszczenie pionków na planszy
     def __init__(self):
         self.board = []
-        self.red_left = 12
-        self.white_left = 12
-        self.red_kings = 0
+        self.black_left = 12
+        self.white_left = 1
+        self.black_kings = 0
         self.white_kings = 0
         self.create_board()
 
@@ -29,8 +29,8 @@ class Board:
             piece.make_king()
             if piece.color == WHITE and piece.is_king == False:
                 self.white_kings += 1
-            elif piece.color == RED and piece.is_king == False:
-                self.red_kings += 1
+            elif piece.color == BLACK and piece.is_king == False:
+                self.black_kings += 1
 
     #Zwraca pionek jako obiekt
     def get_piece(self, row, col):
@@ -45,7 +45,7 @@ class Board:
                     if row < 3:
                         self.board[row].append(Piece(row, col, WHITE))
                     elif row > 4:
-                        self.board[row].append(Piece(row, col, RED))
+                        self.board[row].append(Piece(row, col, BLACK))
                     else:
                         self.board[row].append(0)
                 else:
@@ -64,17 +64,19 @@ class Board:
         for piece in pieces:
             self.board[piece.row][piece.col] = 0
             if piece != 0:
-                if piece.color == RED:
-                    self.red_left -= 1
+                if piece.color == BLACK:
+                    self.black_left -= 1
                 else:
                     self.white_left -= 1
 
+    #Zwraca zwycięsce partii
     def winner(self):
-        if self.red_left <= 0:
+        if self.black_left <= 0:
             return WHITE
         elif self.white_left <= 0:
-            return RED
+            return BLACK
 
+    #Sprawdza możliwe rucht dla wbranego pionka
     def get_valid_moves(self, piece):
         moves = {}
         left = piece.col - 1
@@ -82,18 +84,19 @@ class Board:
         row = piece.row
 
         #Sprawdzanie przekątnych w górę
-        if piece.color == RED or piece.is_king:
-            moves.update(self._traverse_left(row - 1, max(row - 3, -1), -1, piece.color, left))
-            moves.update(self._traverse_right(row - 1, max(row - 3, -1), -1, piece.color, right))
+        if piece.color == BLACK or piece.is_king:
+            moves.update(self._side_left(row - 1, max(row - 3, -1), -1, piece.color, left))
+            moves.update(self._side_right(row - 1, max(row - 3, -1), -1, piece.color, right))
 
         #Sprawdzanie przekątnych w dół
         if piece.color == WHITE or piece.is_king:
-            moves.update(self._traverse_left(row + 1, min(row + 3, ROWS), 1, piece.color, left))
-            moves.update(self._traverse_right(row + 1, min(row + 3, ROWS), 1, piece.color, right))
+            moves.update(self._side_left(row + 1, min(row + 3, ROWS), 1, piece.color, left))
+            moves.update(self._side_right(row + 1, min(row + 3, ROWS), 1, piece.color, right))
 
         return moves
     
-    def _traverse_left(self, start, stop, step, color, left, skipped = []):
+    #Sprawdza możliwe ruchy na lewo
+    def _side_left(self, start, stop, step, color, left, skipped = []):
         moves = {}
         last = []
         for r in range(start, stop, step):
@@ -114,8 +117,8 @@ class Board:
                         row = max(r - 3, 0)
                     else:
                         row = min(r + 3, ROWS)
-                    moves.update(self._traverse_left(r + step, row, step, color, left - 1, skipped = last))
-                    moves.update(self._traverse_right(r + step, row, step, color, left + 1, skipped = last))
+                    moves.update(self._side_left(r + step, row, step, color, left - 1, skipped = last))
+                    moves.update(self._side_right(r + step, row, step, color, left + 1, skipped = last))
                 break
             elif current.color == color:
                 break
@@ -126,7 +129,8 @@ class Board:
 
         return moves
 
-    def _traverse_right(self, start, stop, step, color, right, skipped = []):
+    #Sprawdza możliwe ruchy na prawo
+    def _side_right(self, start, stop, step, color, right, skipped = []):
         moves = {}
         last = []
         for r in range(start, stop, step):
@@ -147,8 +151,8 @@ class Board:
                         row = max(r - 3, 0)
                     else:
                         row = min(r + 3, ROWS)
-                    moves.update(self._traverse_left(r + step, row, step, color, right - 1, skipped = last))
-                    moves.update(self._traverse_right(r + step, row, step, color, right + 1, skipped = last))
+                    moves.update(self._side_left(r + step, row, step, color, right - 1, skipped = last))
+                    moves.update(self._side_right(r + step, row, step, color, right + 1, skipped = last))
                 break
             elif current.color == color:
                 break
