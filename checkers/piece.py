@@ -12,7 +12,6 @@ class Piece:
         self.col = col
         self.color = color
         self.is_king = False
-
         self.x = 0
         self.y = 0
         self.calculate_position()
