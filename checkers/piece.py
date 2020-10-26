@@ -20,7 +20,7 @@ class Piece:
 
     #Funkcja zmieniająca pionek na króla
     def make_king(self):
-        self.is_king = False
+        self.is_king = True
 
     #Funkcja rysująca pionki na planszy
     def draw_pieces(self, window):

@@ -8,14 +8,15 @@ class Game:
         self._init()
         self.window = window
     
+
     #Inicjalizacja nowej gry
     def _init(self):
         self.selected_piece = None;
         self.board = Board()
         self.turn = BLACK
         self.valid_moves = {}
-
     
+
     #Rysowanie/odświeżanie planszy
     def update(self):
         self.board.draw(self.window)
@@ -34,6 +35,7 @@ class Game:
             text = SMALL_FONT.render(("Ruch CZERNYCH!      " + info), True, WHITE)
         window.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT + 5))
 
+
     def winner_screen(self):
         win = "WYGRYWAJĄ"
         if self.winner() == WHITE:
@@ -48,11 +50,13 @@ class Game:
     #Zwraca zwycięsce parti
     def winner(self):
         return self.board.winner()
-        
+
+
     #Reset gry
     def reset(self):
         self._init()
     
+
     #Wybieranie pionka - sprawdzanie poprawności wyboru
     def select(self, row, col):
         if self.selected_piece:
@@ -84,11 +88,13 @@ class Game:
 
         return True
 
+
     #Rysuje kropki na polach na które możemy się ruszyć
     def draw_valid_moves(self, moves):
         for move in moves:
             row, col = move
             pygame.draw.circle(self.window, GREEN, (col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2), 15)
+
 
     #Zmiana strony z możliwością ruchu
     def change_turn(self):

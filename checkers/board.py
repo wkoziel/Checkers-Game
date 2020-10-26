@@ -8,10 +8,11 @@ class Board:
     def __init__(self):
         self.board = []
         self.black_left = 12
-        self.white_left = 1
+        self.white_left = 12
         self.black_kings = 0
         self.white_kings = 0
         self.create_board()
+
 
     #Rysowanie szachownicy - kwadratów po których poruszaja się pionki
     def draw_squares(self, window):
@@ -19,6 +20,7 @@ class Board:
         for row in range(ROWS):
             for col in range(row % 2, COLS, 2):
                 pygame.draw.rect(window, WHITE, (row * SQUARE_SIZE, col * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+
 
     #Zmiana pozycji pionków w tablicy
     def move(self, piece, row, col):
@@ -32,9 +34,11 @@ class Board:
             elif piece.color == BLACK and piece.is_king == False:
                 self.black_kings += 1
 
+
     #Zwraca pionek jako obiekt
     def get_piece(self, row, col):
         return self.board[row][col]
+
 
     #Wypełnianie tablicy board obiektami
     def create_board(self):
@@ -51,6 +55,7 @@ class Board:
                 else:
                     self.board[row].append(0)
 
+
     #Rysowanie planszy
     def draw(self, window):
         self.draw_squares(window)
@@ -60,6 +65,7 @@ class Board:
                 if piece != 0:
                     piece.draw_pieces(window)
 
+    #Usuwa pionek z plaszny po biciu
     def remove(self, pieces):
         for piece in pieces:
             self.board[piece.row][piece.col] = 0
@@ -69,12 +75,14 @@ class Board:
                 else:
                     self.white_left -= 1
 
+
     #Zwraca zwycięsce partii
     def winner(self):
         if self.black_left <= 0:
             return WHITE
         elif self.white_left <= 0:
             return BLACK
+
 
     #Sprawdza możliwe rucht dla wbranego pionka
     def get_valid_moves(self, piece):
@@ -95,14 +103,14 @@ class Board:
 
         return moves
     
+
     #Sprawdza możliwe ruchy na lewo
     def _side_left(self, start, stop, step, color, left, skipped = []):
         moves = {}
         last = []
         for r in range(start, stop, step):
             if left < 0:
-                break
-            
+                break   
             current = self.board[r][left]
             if current == 0:
                 if skipped and not last:
@@ -123,10 +131,8 @@ class Board:
             elif current.color == color:
                 break
             else:
-                last = [current]
-                
+                last = [current]              
             left -= 1
-
         return moves
 
     #Sprawdza możliwe ruchy na prawo
@@ -135,8 +141,7 @@ class Board:
         last = []
         for r in range(start, stop, step):
             if right >= COLS:
-                break
-            
+                break    
             current = self.board[r][right]
             if current == 0:
                 if skipped and not last:
@@ -159,5 +164,4 @@ class Board:
             else:
                 last = [current]
             right += 1
-
         return moves
