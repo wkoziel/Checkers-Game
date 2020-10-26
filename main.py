@@ -1,5 +1,5 @@
 import pygame
-from checkers.constants import WIDTH, HEIGHT, SQUARE_SIZE, BLACK
+from checkers.constants import *
 from checkers.board import Board
 from checkers.game import Game
 
@@ -14,9 +14,30 @@ def get_position_from_mouse(position):
     col = x // SQUARE_SIZE
     return row, col
 
+#Ekran powitalny
+def intro_loop(clock):
+    intro = True
+    while intro:
+        clock.tick(60)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return -1
+            if event.type == pygame.KEYDOWN:
+                intro = False
+        WINDOW.fill(WHITE)#Tło
+        #Piszesz odtąd // Wszsytkie kolory i czcionki są w checkers.constants
+        pygame.draw.rect(WINDOW, BLACK, (0,0 , 100, 100))
+        text = SMALL_FONT.render("Tekst", True, WHITE)
+        WINDOW.blit(text, (0, 0))
+        #Dotąd
+        pygame.display.update()#To na końcu bo odświeża 
+
+        
 #Główna pętla gry
 def main():
     clock = pygame.time.Clock()
+    intro_loop(clock)
     game = Game(WINDOW)
     while True:
         clock.tick(60)

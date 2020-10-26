@@ -13,6 +13,7 @@ WIDTH, HEIGHT = 600, 600
 ROWS, COLS = 8, 8
 SQUARE_SIZE = WIDTH//COLS
 
+#Czcionki
 pygame.init()
 SMALL_FONT = pygame.font.SysFont("Arial", 20)
 HUGE_FONT = pygame.font.SysFont("Arial", 60)
