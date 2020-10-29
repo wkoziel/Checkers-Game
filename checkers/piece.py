@@ -1,3 +1,4 @@
+from checkers import board
 import pygame
 from .constants import BLACK, WHITE, SQUARE_SIZE, GRAY, CROWN
 

@@ -18,9 +18,9 @@ SQUARE_SIZE = WIDTH//COLS
 #Czcionki
 pygame.init()
 SMALL_FONT = pygame.font.SysFont("Arial", 20)
+MEDIUM_FONT = pygame.font.SysFont("Arial", 30)
 HUGE_FONT = pygame.font.SysFont("Arial", 60)
-
-D_FONT = pygame.font.Font('SyneMono-Regular.ttf', 60)
+D_FONT = pygame.font.Font('assets/SyneMono-Regular.ttf', 60)
 
 
 #Obrazy importowane z zewnątrz

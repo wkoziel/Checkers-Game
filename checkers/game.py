@@ -1,5 +1,5 @@
 import pygame
-from .constants import BLACK, WHITE, GREEN, SQUARE_SIZE, SMALL_FONT, HUGE_FONT, WIDTH, HEIGHT, YELLOW
+from .constants import *
 from .board import Board
 class Game:
 
@@ -13,7 +13,7 @@ class Game:
     def _init(self):
         self.selected_piece = None;
         self.board = Board()
-        self.turn = WHITE
+        self.turn = BLACK
         self.valid_moves = {}
     
 
@@ -27,6 +27,7 @@ class Game:
         pygame.display.update()
 
 
+    #Wyświetla informacje na temat ruchu oraz pozostałych pionków
     def draw_turn(self, window):
         info = "Pozostało: " + str(self.board.white_left) + " białych, " + str(self.board.black_left) + " czarnych."
         if self.turn == WHITE:
@@ -36,15 +37,37 @@ class Game:
         window.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT + 5))
 
 
+    #Wyświetla wygranego
     def winner_screen(self):
         win = "WYGRYWAJĄ"
         if self.winner() == WHITE:
             win += " BIAŁE!"
         else:
             win += " CZARNE!"
-        text = HUGE_FONT.render(win , True, YELLOW)
+        text = D_FONT.render(win , True, YELLOW)
+        reset_info = MEDIUM_FONT.render("Aby zresetowac gre wcisnij r", True, WHITE)
         pygame.draw.rect(self.window, BLACK, (0, 200, 600, 200))
         self.window.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
+        self.window.blit(reset_info, (WIDTH // 2 - reset_info.get_width() // 2, HEIGHT // 2 - reset_info.get_height() // 2 + 80))
+
+
+    #Wyświetla ekran powitalny
+    def intro_screen(self):
+        self.window.fill(WHITE)
+        pygame.draw.rect(self.window, ORANGE, (50,50 , 500, 50))
+        pygame.draw.rect(self.window, ORANGE, (50,500 , 500, 50))
+        pygame.draw.rect(self.window, ORANGE, (50,50 , 50, 450))
+        pygame.draw.rect(self.window, ORANGE, (500,50 , 50, 450))
+
+        for i in range (2,10):
+          for j in range (2,10):
+              if (i%2==0 and j%2==0):  pygame.draw.rect(self.window, BLACK, (i*50+50,j*50 , 50, 50))
+              if (i%2==0 and j%2==1):  pygame.draw.rect(self.window, BLACK, (i*50,j*50 , 50, 50))
+              
+        text = SMALL_FONT.render("Wybierajac spacje zaczniesz nowa gre, aby zresetowac gre wcisnij r", True, BLACK)
+        text2 =D_FONT.render("Warcaby", True, BLACK)
+        self.window.blit(text, (50, 570))
+        self.window.blit(text2, (185, 0))
         
 
     #Zwraca zwycięsce parti
