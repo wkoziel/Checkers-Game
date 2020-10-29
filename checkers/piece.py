@@ -36,6 +36,6 @@ class Piece:
         self.col = col
         self.calculate_position()
 
-    #Reprezentacja obiektu w konsli za pomocą koloru
+    #Reprezentacja obiektu w konsoli za pomocą koloru
     def __repr__(self):
         return str(self.color)

@@ -13,7 +13,7 @@ class Game:
     def _init(self):
         self.selected_piece = None;
         self.board = Board()
-        self.turn = BLACK
+        self.turn = WHITE
         self.valid_moves = {}
     
 
@@ -28,11 +28,11 @@ class Game:
 
 
     def draw_turn(self, window):
-        info = "Pozostało: " + str(self.board.white_left) + " białych, " + str(self.board.black_left) + " czernych."
+        info = "Pozostało: " + str(self.board.white_left) + " białych, " + str(self.board.black_left) + " czarnych."
         if self.turn == WHITE:
             text = SMALL_FONT.render(("Ruch BIAŁYCH!       " + info), True, WHITE)
         else:
-            text = SMALL_FONT.render(("Ruch CZERNYCH!      " + info), True, WHITE)
+            text = SMALL_FONT.render(("Ruch CZARNYCH!      " + info), True, WHITE)
         window.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT + 5))
 
 
