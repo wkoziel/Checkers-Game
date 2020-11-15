@@ -13,7 +13,7 @@ class Game:
     def _init(self):
         self.selected_piece = None;
         self.board = Board()
-        self.turn = BLACK
+        self.turn = WHITE
         self.valid_moves = {}
     
 
