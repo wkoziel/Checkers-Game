@@ -1,5 +1,5 @@
 # Checkers
-> A window version the of checkers for a game between two human users, written using the Pygame library.
+> A window application that allows you to play checkers between two human users, written using the Pygame library.
 
 ## Table of Contents
 * [General Info](#general-information)
