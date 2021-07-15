@@ -19,8 +19,8 @@
 
 
 ## Technologies Used
-- Python - version 3.9.6
-- Pygame - version 2.0
+- **Python** - version 3.9.6
+- **Pygame** - version 2.0
 
 
 ## Screenshots
